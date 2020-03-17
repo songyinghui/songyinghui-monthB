@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.songyinghui.month_B.dao.BeanDao">
+	<resultMap type="jiagong" id="jiaMap">
+		<id column="id" property="id" />
+		<result column="dh" property="dh" />
+		<result column="baoTime" property="baoTime" />
+		<result column="makeDept" property="makeDept" />
+		<result column="makeDeptNo" property="makeDeptNo" />
+		<result column="pid" property="pid" />
+		<result column="oneprice" property="oneprice" />
+		<result column="num" property="num" />
+		<result column="price" property="price" />
+		<result column="yaoqiu" property="yaoqiu" />
+		<result column="matchineBh" property="matchineBh" />
+		<result column="matchineDept" property="matchineDept" />
+		<result column="shOnePrice" property="shOnePrice" />
+		<result column="shPrice" property="shPrice" />
+		<result column="people" property="people" />
+		<result column="dw" property="dw" />
+		<result column="dwdj" property="dwdj" />
+		<result column="returnTime" property="returnTime" />
+		<result column="picture" property="picture" />
+		<result column="returnTime" property="returnTime" />
+		<result column="telePeople" property="telePeople" />
+		<result column="dwPrice" property="dwPrice" />
+		<result column="okPeople" property="okPeople" />
+		<result column="bxPeople" property="bxPeople" />
+		<result column="beizhu" property="beizhu" />
+		<result column="waisong" property="waisong" />
+		<association property="peijian" javaType="peijian">
+			<id column="pid" property="id" />
+			<result column="name" property="name" />
+			<result column="bh" property="bh" />
+		</association>
+	</resultMap>
+	<select id="selects" resultMap="jiaMap">
+		select j.*,p.name,p.bh from jiagong j  JOIN peijian p on j.pid=p.id
+		<where>
+			<if test="dh!=null and dh!=''">
+				j.dh like concat("%",#{dh},"%")
+			</if>
+			
+			<if test="beizhu!=null and beizhu!=''">
+				and j.beizhu like concat("%",#{beizhu},"%")
+			</if>
+			<if test="time1!=null and time1!=''">
+				and j.baoTime>=#{time1}
+			</if>
+			<if test="time2!=null and time2!=''">
+				and j.baoTime&lt;=#{time2}
+			</if>
+			
+		</where>
+
+	</select>
+	<select id="getAll" resultType="peijian">
+		select * from peijian
+	</select>
+	<insert id="insert">
+	 INSERT INTO jiagong(id,dh,baoTime,makeDept,makeDeptNo,pid,oneprice,num,price,yaoqiu,matchineBh,matchineDept,shOnePrice,shPrice,people,dw,dwdj,returnTime,picture,telePeople,dwPrice,okPeople,bxPeople,beizhu,waisong)
+	  VALUES (0, #{dh},#{baoTime},#{makeDept}, #{makeDeptNo},#{pid}, #{oneprice}, #{num}, #{price}, #{yaoqiu},#{matchineBh}, #{matchineDept}, #{shOnePrice}, #{shPrice},#{people}, #{dw},#{dwdj}, #{returnTime},#{picture}, #{telePeople}, #{dwPrice}, #{okPeople}, #{bxPeople}, #{beizhu}, #{waisong});
+	</insert>
+	<select id="selectOne" resultMap="jiaMap">
+	  select * from jiagong j LEFT JOIN peijian p on j.pid=p.id where j.id=#{id}
+	</select>
+</mapper>
